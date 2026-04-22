@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0d0d0d;
+      --paper: #f5f0e8;
+      --accent: #e83a2f;
+      --muted: #8a8070;
+      --line: #c8c0b0;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Space Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.5;
+    }
+
+    /* Header bar */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.5rem;
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+      opacity: 0;
+      animation: fadeDown 0.6s ease 0.1s forwards;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.12em;
+      color: var(--ink);
+    }
+
+    nav a {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      margin-left: 2rem;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 4rem;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 3rem 5rem 2.5rem;
+      border-right: 1px solid var(--line);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3.5rem, 7vw, 6rem);
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 2rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-body {
+      font-size: 0.82rem;
+      line-height: 1.9;
+      color: var(--muted);
+      max-width: 38ch;
+      margin-bottom: 3rem;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 0.75rem 1.8rem;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--ink);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 0.75rem 1.8rem;
+      background: transparent;
+      color: var(--ink);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--ink); }
+
+    /* Hero right — decorative panel */
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink);
+      opacity: 0;
+      animation: fadeIn 1s ease 0.5s forwards;
+    }
+
+    .hero-right::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 60%, rgba(232,58,47,0.35) 0%, transparent 65%);
+    }
+
+    .big-letter {
+      position: absolute;
+      bottom: -0.15em;
+      right: -0.05em;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40vw;
+      line-height: 1;
+      color: rgba(255,255,255,0.04);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .tag-list {
+      position: absolute;
+      top: 3rem;
+      left: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      z-index: 2;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.3rem 0.75rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.5);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .center-badge {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .badge-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      color: var(--paper);
+      line-height: 1;
+    }
+
+    .badge-sub {
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-top: 0.3rem;
+    }
+
+    /* Stats strip */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.8s forwards;
+    }
+
+    .stat {
+      padding: 2.5rem 2.5rem;
+      border-right: 1px solid var(--line);
+    }
+    .stat:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 0.04em;
+      display: block;
+      color: var(--ink);
+    }
+
+    .stat-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      display: block;
+    }
+
+    /* Section */
+    .section {
+      padding: 6rem 2.5rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .section-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0;
+      border: 1px solid var(--line);
+    }
+
+    .card {
+      padding: 2.5rem;
+      border-right: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s;
+    }
+    .card:last-child { border-right: none; }
+    .card:hover { background: var(--ink); color: var(--paper); }
+    .card:hover .card-icon { color: var(--accent); }
+    .card:hover .card-text { color: rgba(255,255,255,0.5); }
+
+    .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+      transition: color 0.25s;
+    }
+
+    .card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-text {
+      font-size: 0.75rem;
+      line-height: 1.85;
+      color: var(--muted);
+      transition: color 0.25s;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 2.5rem;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .stats { grid-template-columns: 1fr; }
+      .stat { border-right: none; border-bottom: 1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Studio — Index</div>
+    <nav>
+      <a href="#">Work</a>
+      <a href="#">About</a>
+      <a href="#">Journal</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-left">
+        <p class="eyebrow">Est. 2024 &nbsp;·&nbsp; Building the future</p>
+        <h1>Craft that<br/><em>speaks</em><br/>for itself</h1>
+        <p class="hero-body">
+          We build digital products with obsessive attention to detail —
+          where every pixel, interaction, and line of code is intentional.
+          No filler. No fluff. Just work that endures.
+        </p>
+        <div class="cta-row">
+          <a href="#" class="btn-primary">View Work</a>
+          <a href="#" class="btn-ghost">Get in Touch</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="tag-list">
+          <span class="tag">Design Systems</span>
+          <span class="tag">Front-End Dev</span>
+          <span class="tag">Brand Identity</span>
+          <span class="tag">Motion</span>
+        </div>
+        <div class="center-badge">
+          <span class="badge-num">12</span>
+          <span class="badge-sub">Years of craft</span>
+        </div>
+        <div class="big-letter">S</div>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num">200+</span>
+        <span class="stat-label">Projects delivered</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">98%</span>
+        <span class="stat-label">Client satisfaction</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">40+</span>
+        <span class="stat-label">Global partners</span>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-header">
+        <span class="section-num">01 /</span>
+        <h2>What we do</h2>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <span class="card-icon">◈</span>
+          <h3>Design</h3>
+          <p class="card-text">Interfaces that balance beauty with function. Every decision is deliberate — from the grid to the micro-interaction.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">◉</span>
+          <h3>Engineering</h3>
+          <p class="card-text">Clean, performant code built for scale. We write systems that are a pleasure to work with, now and in five years.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">◍</span>
+          <h3>Strategy</h3>
+          <p class="card-text">Good work starts with good thinking. We dig into the problem before we touch a tool, so solutions actually solve things.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2024 Studio Index</span>
+    <span>Chennai · Remote · Worldwide</span>
+  </footer>
+
+</body>
+</html>
